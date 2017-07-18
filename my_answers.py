@@ -37,8 +37,10 @@ def build_part1_RNN(window_size):
 
 ### TODO: return the text input with only ascii lowercase and the punctuation given below included.
 def cleaned_text(text):
-    punctuation = ['!', ',', '.', ':', ';', '?']
+    punctuation = ['!', ',', '.', ':', ';', '?', ' ']
 
+    return ''.join(s for s in text if s.isalpha() or s in punctuation)
+    
     for p in punctuation:
         text = text.replace(p, ' ')
     
@@ -50,12 +52,13 @@ def window_transform_text(text, window_size, step_size):
     inputs = []
     outputs = []
 
-    for i in range(int(len(text) / step_size)):
-        inputs.append(text[i * step_size:(i * step_size) + window_size])
-        try:
-            outputs.append(text[(i * step_size) + window_size])
-        except IndexError:
-            outputs.append(text[-1])
+    for i in range(0, len(text) - window_size, step_size):
+        inputs.append(text[i:i + window_size])
+        outputs.append(text[i + window_size])
+        #try:
+        #    outputs.append(text[(i * step_size) + window_size])
+        #except IndexError:
+        #    outputs.append(text[-1])
     
     return inputs,outputs
 
